@@ -27,7 +27,7 @@ func _ready() -> void:
 	_timer = randf_range(0.6, 2.0)
 
 func _update(delta: float, screen_x: float) -> void:
-	if screen_x < -20.0 or screen_x > 280.0:
+	if screen_x < -20.0 or screen_x > Game.screen_w + 24.0:
 		return
 	_timer -= delta * Game.difficulty_multiplier()
 	if _timer <= 0.0 and level and level.player and level.player.is_alive():

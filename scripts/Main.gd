@@ -1,19 +1,16 @@
 extends Node
 ## Top-level orchestrator. Gameplay (terrain/player/enemies) and every
 ## "arcade screen" (title, HUD, pause, game over, settings) render inside a
-## fixed 256x224 SubViewport, keeping the pixel art crisp and the aspect
-## ratio authentic regardless of device. That sub-view is displayed through
-## a SubViewportContainer which is kept letterboxed to the correct aspect
-## and centred in the real window - see _update_viewport_layout().
+## SubViewport that fills the real screen exactly - no letterboxing. Height
+## is fixed at Game.GAME_H (224, preserving the terrain's authored vertical
+## proportions); width tracks the device's actual aspect ratio each resize
+## (Game.screen_w), so a wider phone simply reveals more of the play field
+## instead of shrinking into a fixed-aspect box.
 ##
 ## TouchControls is the one exception: it lives OUTSIDE the sub-view, as a
-## direct child of Main, positioned using the *actual* screen size. That
-## keeps the joystick/fire/bomb buttons reachable in the true corners of
-## the phone regardless of the letterboxing above, instead of being
-## squeezed into the same narrow fixed-aspect strip as the game view.
-
-const GAME_W := 256.0
-const GAME_H := 224.0
+## direct child of Main, positioned using the *actual* screen size in real
+## pixels, so the joystick/fire/bomb buttons are always in the reachable
+## corners of the phone regardless of the game's internal resolution.
 
 var game_viewport: SubViewport
 var game_container: SubViewportContainer
@@ -40,15 +37,21 @@ func _ready() -> void:
 	add_child(display_layer)
 
 	game_viewport = SubViewport.new()
-	game_viewport.size = Vector2i(int(GAME_W), int(GAME_H))
+	game_viewport.size = Vector2i(int(Game.screen_w), int(Game.GAME_H))
 	game_viewport.transparent_bg = false
 	game_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	game_viewport.handle_input_locally = false
 	game_viewport.snap_2d_transforms_to_pixel = true
 	game_viewport.snap_2d_vertices_to_pixel = true
 
+	# stretch=false here deliberately: with stretch=true, SubViewportContainer
+	# forces SubViewport.size to always equal its own size and silently
+	# rejects manual resizing, which defeats the whole point of a fixed
+	# low-res internal canvas. Instead the sub-viewport renders at its
+	# native (small) resolution and the CONTAINER itself is scaled up as a
+	# plain node transform in _update_game_resolution() below.
 	game_container = SubViewportContainer.new()
-	game_container.stretch = true
+	game_container.stretch = false
 	game_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	game_container.mouse_filter = Control.MOUSE_FILTER_PASS
 	display_layer.add_child(game_container)
@@ -79,24 +82,25 @@ func _ready() -> void:
 	Game.state_changed.connect(_on_state_changed)
 	Game.extra_life_awarded.connect(func(): SFX.play("extra_life"))
 
-	get_viewport().size_changed.connect(_update_viewport_layout)
-	_update_viewport_layout()
+	get_viewport().size_changed.connect(_update_game_resolution)
+	call_deferred("_update_game_resolution")
 
 	set_process(true)
 
-func _update_viewport_layout() -> void:
-	var win_size: Vector2 = Vector2(get_viewport().get_visible_rect().size)
-	if win_size.x <= 0.0 or win_size.y <= 0.0:
+func _update_game_resolution() -> void:
+	var real_size: Vector2 = Vector2(get_viewport().get_visible_rect().size)
+	if real_size.x <= 0.0 or real_size.y <= 0.0:
 		return
-	var target_aspect := GAME_W / GAME_H
-	var win_aspect := win_size.x / win_size.y
-	var target_size: Vector2
-	if win_aspect > target_aspect:
-		target_size = Vector2(win_size.y * target_aspect, win_size.y)
-	else:
-		target_size = Vector2(win_size.x, win_size.x / target_aspect)
-	game_container.size = target_size
-	game_container.position = (win_size - target_size) * 0.5
+	var aspect: float = real_size.x / real_size.y
+	var w: float = roundf(Game.GAME_H * aspect)
+	w = maxf(w, 64.0)
+	Game.screen_w = w
+
+	game_viewport.size = Vector2i(int(w), int(Game.GAME_H))
+	game_container.size = Vector2(w, Game.GAME_H)
+	var k: float = real_size.y / Game.GAME_H
+	game_container.scale = Vector2(k, k)
+	game_container.position = Vector2.ZERO
 
 func _process(_delta: float) -> void:
 	if Controls.pause_just_pressed:

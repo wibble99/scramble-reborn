@@ -10,6 +10,12 @@ const STARTING_LIVES := 3
 const MAX_FUEL := 100.0
 const FUEL_DRAIN_PER_SEC := 2.6
 const EXTRA_LIFE_STEP := 10000
+const GAME_H := 224.0
+
+## Current logical play-field width in game units. Height is always fixed
+## at GAME_H (224); width adapts to the real device aspect ratio so the
+## game fills the whole screen with no letterboxing - see Main.gd.
+var screen_w: float = 256.0
 
 signal score_changed(new_score: int)
 signal lives_changed(new_lives: int)

@@ -6,7 +6,6 @@ class_name LevelManager
 ## pools for every pooled transient (bullets, bombs, enemy shots,
 ## explosions) so Player/enemies never allocate a new node mid-play.
 
-const SCREEN_W := 256.0
 const SPAWN_MARGIN := 40.0
 const SCROLL_RANGE := 42.0
 const SCROLL_MIN := 20.0
@@ -94,7 +93,7 @@ func _physics_process(delta: float) -> void:
 		Game.advance_stage()
 
 func _update_spawns() -> void:
-	var reveal_x: float = scroll_distance + SCREEN_W + SPAWN_MARGIN
+	var reveal_x: float = scroll_distance + Game.screen_w + SPAWN_MARGIN
 	while _spawn_cursor < _enemy_spawns.size() and _enemy_spawns[_spawn_cursor].x <= reveal_x:
 		_spawn_enemy(_enemy_spawns[_spawn_cursor])
 		_spawn_cursor += 1

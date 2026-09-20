@@ -38,7 +38,7 @@ func update_scroll(scroll_distance: float) -> void:
 	for entry in _segments:
 		var screen_x: float = entry.world_x - scroll_distance
 		entry.node.position.x = screen_x
-		var offscreen: bool = screen_x < -CULL_MARGIN or screen_x > CULL_MARGIN + 260.0
+		var offscreen: bool = screen_x < -CULL_MARGIN or screen_x > CULL_MARGIN + Game.screen_w
 		entry.node.visible = not offscreen
 		entry.node.monitorable = not offscreen
 

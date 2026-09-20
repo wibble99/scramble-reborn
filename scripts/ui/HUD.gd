@@ -30,8 +30,13 @@ func _ready() -> void:
 	high_label.position = Vector2(88, 2)
 	root.add_child(high_label)
 
-	stage_label = UIHelper.make_label("STAGE 1", 8, Palette.WHITE)
-	stage_label.position = Vector2(178, 2)
+	stage_label = UIHelper.make_label("STAGE 1", 8, Palette.WHITE, HORIZONTAL_ALIGNMENT_RIGHT)
+	stage_label.anchor_left = 1.0
+	stage_label.anchor_right = 1.0
+	stage_label.offset_left = -80.0
+	stage_label.offset_right = -3.0
+	stage_label.offset_top = 2.0
+	stage_label.offset_bottom = 11.0
 	root.add_child(stage_label)
 
 	lives_label = UIHelper.make_label("SHIPS 3", 8, Palette.SHIP_GREEN)
@@ -43,8 +48,12 @@ func _ready() -> void:
 	root.add_child(fuel_label)
 
 	fuel_bar = FuelBar.new()
-	fuel_bar.position = Vector2(95, 13)
-	fuel_bar.size = Vector2(110, 7)
+	fuel_bar.anchor_left = 0.0
+	fuel_bar.anchor_right = 0.62
+	fuel_bar.offset_left = 95.0
+	fuel_bar.offset_right = 0.0
+	fuel_bar.offset_top = 13.0
+	fuel_bar.offset_bottom = 20.0
 	root.add_child(fuel_bar)
 
 	Game.score_changed.connect(func(v): score_label.text = "SCORE %d" % v)

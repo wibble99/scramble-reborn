@@ -23,3 +23,17 @@ static func make_button(text: String, size: int = 12) -> Button:
 	b.add_theme_font_size_override("font_size", size)
 	b.custom_minimum_size = Vector2(96, 22)
 	return b
+
+## Anchors a control to span the full width of its parent (tracking live
+## resizes, e.g. Game.screen_w changing) while keeping a fixed vertical
+## position/height - used for centred full-width title/menu text so it
+## stays centred regardless of the device's aspect ratio.
+static func layout_full_width(ctrl: Control, y: float, h: float) -> void:
+	ctrl.anchor_left = 0.0
+	ctrl.anchor_right = 1.0
+	ctrl.anchor_top = 0.0
+	ctrl.anchor_bottom = 0.0
+	ctrl.offset_left = 0.0
+	ctrl.offset_right = 0.0
+	ctrl.offset_top = y
+	ctrl.offset_bottom = y + h

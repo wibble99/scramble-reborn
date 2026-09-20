@@ -19,47 +19,56 @@ func _ready() -> void:
 	root.add_child(bg)
 
 	var title := UIHelper.make_label("PAUSED", 20, Palette.HUD_TEXT, HORIZONTAL_ALIGNMENT_CENTER)
-	title.position = Vector2(0, 26)
-	title.size = Vector2(256, 26)
+	UIHelper.layout_full_width(title, 26.0, 26.0)
 	root.add_child(title)
 
+	# A fixed-width panel, horizontally centred regardless of screen width.
+	var panel := Control.new()
+	panel.anchor_left = 0.5
+	panel.anchor_right = 0.5
+	panel.offset_left = -100.0
+	panel.offset_right = 100.0
+	panel.offset_top = 0.0
+	panel.offset_bottom = 224.0
+	root.add_child(panel)
+
 	var sfx_label := UIHelper.make_label("SFX", 9, Palette.WHITE)
-	sfx_label.position = Vector2(60, 70)
-	root.add_child(sfx_label)
+	sfx_label.position = Vector2(0, 70)
+	panel.add_child(sfx_label)
 
 	var sfx_slider := HSlider.new()
-	sfx_slider.position = Vector2(95, 70)
+	sfx_slider.position = Vector2(35, 70)
 	sfx_slider.size = Vector2(100, 12)
 	sfx_slider.min_value = 0.0
 	sfx_slider.max_value = 1.0
 	sfx_slider.step = 0.05
 	sfx_slider.value = Save.sfx_volume
 	sfx_slider.value_changed.connect(func(v): Save.set_sfx_volume(v))
-	root.add_child(sfx_slider)
+	panel.add_child(sfx_slider)
 
 	var music_label := UIHelper.make_label("MUSIC", 9, Palette.WHITE)
-	music_label.position = Vector2(60, 90)
-	root.add_child(music_label)
+	music_label.position = Vector2(0, 90)
+	panel.add_child(music_label)
 
 	var music_slider := HSlider.new()
-	music_slider.position = Vector2(95, 90)
+	music_slider.position = Vector2(35, 90)
 	music_slider.size = Vector2(100, 12)
 	music_slider.min_value = 0.0
 	music_slider.max_value = 1.0
 	music_slider.step = 0.05
 	music_slider.value = Save.music_volume
 	music_slider.value_changed.connect(func(v): Save.set_music_volume(v))
-	root.add_child(music_slider)
+	panel.add_child(music_slider)
 
 	var resume_btn := UIHelper.make_button("RESUME", 11)
-	resume_btn.position = Vector2(78, 120)
+	resume_btn.position = Vector2(18, 120)
 	resume_btn.pressed.connect(func(): Game.resume_game())
-	root.add_child(resume_btn)
+	panel.add_child(resume_btn)
 
 	var quit_btn := UIHelper.make_button("QUIT TO TITLE", 10)
-	quit_btn.position = Vector2(68, 150)
+	quit_btn.position = Vector2(8, 150)
 	quit_btn.pressed.connect(_on_quit_pressed)
-	root.add_child(quit_btn)
+	panel.add_child(quit_btn)
 
 	set_process(true)
 

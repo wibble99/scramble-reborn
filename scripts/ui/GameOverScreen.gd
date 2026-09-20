@@ -31,23 +31,19 @@ func _ready() -> void:
 	root.add_child(continue_btn)
 
 	var title := UIHelper.make_label("GAME OVER", 26, Palette.HUD_WARN, HORIZONTAL_ALIGNMENT_CENTER)
-	title.position = Vector2(0, 60)
-	title.size = Vector2(256, 32)
+	UIHelper.layout_full_width(title, 60.0, 32.0)
 	root.add_child(title)
 
 	score_label = UIHelper.make_label("SCORE 0", 12, Palette.WHITE, HORIZONTAL_ALIGNMENT_CENTER)
-	score_label.position = Vector2(0, 104)
-	score_label.size = Vector2(256, 16)
+	UIHelper.layout_full_width(score_label, 104.0, 16.0)
 	root.add_child(score_label)
 
 	new_high_label = UIHelper.make_label("NEW HIGH SCORE!", 11, Palette.HUD_GOLD, HORIZONTAL_ALIGNMENT_CENTER)
-	new_high_label.position = Vector2(0, 126)
-	new_high_label.size = Vector2(256, 16)
+	UIHelper.layout_full_width(new_high_label, 126.0, 16.0)
 	root.add_child(new_high_label)
 
 	var prompt := UIHelper.make_label("TOUCH TO CONTINUE", 9, Palette.GREY, HORIZONTAL_ALIGNMENT_CENTER)
-	prompt.position = Vector2(0, 170)
-	prompt.size = Vector2(256, 14)
+	UIHelper.layout_full_width(prompt, 170.0, 14.0)
 	root.add_child(prompt)
 
 	set_process(true)

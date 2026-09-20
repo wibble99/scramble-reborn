@@ -14,8 +14,7 @@ func _ready() -> void:
 	add_child(root)
 
 	label = UIHelper.make_label("", 16, Palette.HUD_GOLD, HORIZONTAL_ALIGNMENT_CENTER)
-	label.position = Vector2(0, 92)
-	label.size = Vector2(256, 24)
+	UIHelper.layout_full_width(label, 92.0, 24.0)
 	root.add_child(label)
 
 	set_process(true)

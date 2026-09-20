@@ -4,7 +4,7 @@ class_name Bullet
 ## on the ENEMY_AIR layer (flying enemies, rising missiles).
 
 const SPEED := 270.0
-const SCREEN_LIMIT := 280.0
+const SCREEN_MARGIN := 24.0
 
 var _velocity: Vector2 = Vector2.ZERO
 var _done: bool = false
@@ -33,7 +33,7 @@ func activate(pos: Vector2) -> void:
 
 func _physics_process(delta: float) -> void:
 	position += _velocity * delta
-	if position.x > SCREEN_LIMIT:
+	if position.x > Game.screen_w + SCREEN_MARGIN:
 		_done = true
 
 func _on_area_entered(area: Area2D) -> void:

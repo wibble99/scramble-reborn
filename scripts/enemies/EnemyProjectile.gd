@@ -32,7 +32,7 @@ func activate(pos: Vector2, direction: Vector2, speed_mult: float = 1.0) -> void
 
 func _physics_process(delta: float) -> void:
 	position += _velocity * delta
-	if position.x < -24.0 or position.x > 280.0 or position.y < -24.0 or position.y > 248.0:
+	if position.x < -24.0 or position.x > Game.screen_w + 24.0 or position.y < -24.0 or position.y > Game.GAME_H + 24.0:
 		_done = true
 
 func is_done() -> bool:

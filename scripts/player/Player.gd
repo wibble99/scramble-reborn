@@ -8,14 +8,13 @@ class_name Player
 
 signal died
 
-const SCREEN_H := 224.0
 const V_ACCEL := 340.0
 const V_MAX_SPEED := 95.0
 const V_DAMPING := 300.0
 const H_ACCEL := 1.1
 const H_DAMPING := 0.9
-const SHIP_MIN_X := 56.0
-const SHIP_MAX_X := 104.0
+const SHIP_MIN_X_FRAC := 0.22 # fraction of Game.screen_w
+const SHIP_MAX_X_FRAC := 0.41
 const FIRE_COOLDOWN := 0.24
 const BOMB_COOLDOWN := 0.5
 const RESPAWN_INVULN := 2.2
@@ -47,12 +46,18 @@ func _ready() -> void:
 	add_child(sprite)
 
 	area_entered.connect(_on_area_entered)
-	position = Vector2(SHIP_MIN_X + 10.0, SCREEN_H * 0.5)
+	position = Vector2(_ship_min_x() + 10.0, Game.GAME_H * 0.5)
+
+func _ship_min_x() -> float:
+	return Game.screen_w * SHIP_MIN_X_FRAC
+
+func _ship_max_x() -> float:
+	return Game.screen_w * SHIP_MAX_X_FRAC
 
 func reset_for_new_life() -> void:
 	velocity_y = 0.0
 	speed_factor = 0.0
-	position = Vector2(SHIP_MIN_X + 10.0, SCREEN_H * 0.5)
+	position = Vector2(_ship_min_x() + 10.0, Game.GAME_H * 0.5)
 	_invuln_timer = RESPAWN_INVULN
 	_blink_time = 0.0
 	_alive = true
@@ -76,7 +81,7 @@ func _physics_process(delta: float) -> void:
 		velocity_y = move_toward(velocity_y, vy_in * V_MAX_SPEED, V_ACCEL * delta)
 	else:
 		velocity_y = move_toward(velocity_y, 0.0, V_DAMPING * delta)
-	position.y = clampf(position.y + velocity_y * delta, 8.0, SCREEN_H - 8.0)
+	position.y = clampf(position.y + velocity_y * delta, 8.0, Game.GAME_H - 8.0)
 
 	var hx_in := Controls.hx
 	if absf(hx_in) > 0.01:
@@ -84,7 +89,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		speed_factor = move_toward(speed_factor, 0.0, H_DAMPING * delta)
 	speed_factor = clampf(speed_factor, -1.0, 1.0)
-	var target_x := lerpf(SHIP_MIN_X, SHIP_MAX_X, (speed_factor + 1.0) * 0.5)
+	var target_x := lerpf(_ship_min_x(), _ship_max_x(), (speed_factor + 1.0) * 0.5)
 	position.x = move_toward(position.x, target_x, 60.0 * delta)
 
 	_fire_timer -= delta

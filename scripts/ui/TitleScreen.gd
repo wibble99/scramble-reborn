@@ -31,32 +31,32 @@ func _ready() -> void:
 	root.add_child(start_btn)
 
 	var title := UIHelper.make_label("SCRAMBLE", 30, Palette.HUD_TEXT, HORIZONTAL_ALIGNMENT_CENTER)
-	title.position = Vector2(0, 36)
-	title.size = Vector2(256, 36)
+	UIHelper.layout_full_width(title, 36.0, 36.0)
 	root.add_child(title)
 
 	var subtitle := UIHelper.make_label("R E B O R N", 14, Palette.HUD_GOLD, HORIZONTAL_ALIGNMENT_CENTER)
-	subtitle.position = Vector2(0, 70)
-	subtitle.size = Vector2(256, 18)
+	UIHelper.layout_full_width(subtitle, 70.0, 18.0)
 	root.add_child(subtitle)
 
 	high_label = UIHelper.make_label("HIGH SCORE %d" % Save.high_score, 10, Palette.WHITE, HORIZONTAL_ALIGNMENT_CENTER)
-	high_label.position = Vector2(0, 108)
-	high_label.size = Vector2(256, 14)
+	UIHelper.layout_full_width(high_label, 108.0, 14.0)
 	root.add_child(high_label)
 
 	prompt_label = UIHelper.make_label("TOUCH TO START", 11, Palette.SHIP_GREEN, HORIZONTAL_ALIGNMENT_CENTER)
-	prompt_label.position = Vector2(0, 148)
-	prompt_label.size = Vector2(256, 16)
+	UIHelper.layout_full_width(prompt_label, 148.0, 16.0)
 	root.add_child(prompt_label)
 
 	var one_player := UIHelper.make_label("1 PLAYER", 8, Palette.GREY, HORIZONTAL_ALIGNMENT_CENTER)
-	one_player.position = Vector2(0, 168)
-	one_player.size = Vector2(256, 12)
+	UIHelper.layout_full_width(one_player, 168.0, 12.0)
 	root.add_child(one_player)
 
 	var settings_btn := UIHelper.make_button("SETTINGS", 9)
-	settings_btn.position = Vector2(80, 190)
+	settings_btn.anchor_left = 0.5
+	settings_btn.anchor_right = 0.5
+	settings_btn.offset_left = -48.0
+	settings_btn.offset_right = 48.0
+	settings_btn.offset_top = 190.0
+	settings_btn.offset_bottom = 212.0
 	settings_btn.pressed.connect(func(): settings_requested.emit())
 	root.add_child(settings_btn)
 
