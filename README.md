@@ -89,16 +89,28 @@ review as text and avoids hand-maintaining dozens of small scene files.
 2. **Editor > Editor Settings > Export > Android**: point `Android SDK
    Path` at your installed SDK (needs `cmdline-tools`, a platform, and
    `build-tools`), and make sure a JDK 17 is available.
-3. Open **Project > Export**. This project already ships an `Android`
+3. **Project > Install Android Build Template...** - required once per
+   clone/Godot-version, since `android/build/` is gitignored (it's ~85MB of
+   generated Gradle sources). This writes `android/build/` and
+   `android/.build_version`.
+   - *CLI note:* `godot --headless --install-android-build-template` has
+     been unreliable in some 4.7 builds (hangs indefinitely with no
+     output). If that happens, do it from the editor UI instead, or
+     extract `<export_templates>/android_source.zip` to `android/build/`
+     yourself and write `android/.build_version` containing just the
+     engine version string (e.g. `4.7.stable`) - that's all the menu
+     command does under the hood.
+4. Open **Project > Export**. This project already ships an `Android`
    preset in `export_presets.cfg` (package id
    `com.gothamvillage.scramblereborn`, landscape, min SDK 24 / target 34,
    arm64-v8a + x86_64, gradle build). Select it.
-4. The first debug export will prompt Godot to generate a debug keystore
+5. The first debug export will prompt Godot to generate a debug keystore
    automatically - accept that, or point it at your own in Editor Settings.
-5. Click **Export Project**, choose a debug build, and pick an output path
+6. Click **Export Project**, choose a debug build, and pick an output path
    (defaults to `build/android/ScrambleReborn.apk`, already gitignored).
-6. Install with `adb install build/android/ScrambleReborn.apk` or drag it
-   onto a device/emulator.
+7. Install with `adb install build/android/ScrambleReborn.apk` or drag it
+   onto a device/emulator. Same steps work headless:
+   `godot --headless --path . --export-debug "Android" build/android/ScrambleReborn.apk`.
 
 ## Building an Android App Bundle (AAB) for Play Store
 
@@ -114,6 +126,18 @@ review as text and avoids hand-maintaining dozens of small scene files.
    Settings for a global default) before exporting a **Release** build.
 4. Export - Godot/Gradle produces the signed `.aab`, ready to upload to
    the Play Console.
+
+## Display architecture
+
+Gameplay, HUD and every arcade-style screen (title/pause/game over/
+settings) render into a fixed 256x224 `SubViewport` so the pixel art stays
+crisp and the aspect ratio stays authentic on any device - it's displayed
+through a `SubViewportContainer` that Main.gd keeps letterboxed and
+centred in the real window. `TouchControls` is the one thing that lives
+*outside* that sub-view, positioned as fractions of the actual screen size
+in `scripts/ui/TouchControls.gd`, so the joystick/fire/bomb buttons always
+land in the true reachable corners of the phone instead of being squeezed
+into the same narrow letterboxed strip as the game view.
 
 ## Known simplifications
 

@@ -28,12 +28,9 @@ Game="*res://scripts/autoload/Game.gd"
 
 [display]
 
-window/size/viewport_width=256
-window/size/viewport_height=224
-window/size/window_width_override=1024
-window/size/window_height_override=896
-window/stretch/mode="viewport"
-window/stretch/aspect="keep"
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="disabled"
 window/handheld/orientation="landscape"
 window/energy_saving/keep_screen_on=true
 window/vsync/vsync_mode=1
@@ -49,6 +46,7 @@ common/physics_ticks_per_second=60
 
 [rendering]
 
+textures/vram_compression/import_etc2_astc=true
 renderer/rendering_method="mobile"
 renderer/rendering_method.mobile="mobile"
 textures/canvas_textures/default_texture_filter=0

@@ -52,11 +52,20 @@ func load_stage(stage_data: Dictionary) -> void:
 	_shot_pool.release_all()
 	_explosion_pool.release_all()
 	_clear_enemies()
+	_spawn_buildings(stage_data.get("buildings", []))
 
 func _clear_enemies() -> void:
 	for child in get_children():
-		if child is EnemyBase:
+		if child is EnemyBase or child is Decoration:
 			child.queue_free()
+
+func _spawn_buildings(buildings: Array) -> void:
+	for b in buildings:
+		var wx: float = b.get("x", 0.0)
+		var d := Decoration.new()
+		add_child(d)
+		d.setup(wx, self, b.get("w", 14.0), b.get("h", 24.0), b.get("rows", 2))
+		d.position.y = terrain.floor_at(wx)
 
 func _physics_process(delta: float) -> void:
 	if Game.state != Game.State.PLAYING or stage_finished or player == null or not player.is_alive():

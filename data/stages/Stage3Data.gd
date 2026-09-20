@@ -1,8 +1,9 @@
 extends RefCounted
 class_name Stage3Data
-## Hand-authored terrain heightmap and enemy placement data for this stage.
-## Generated once with a deterministic parametric curve and saved as plain
-## data so the route and hazards are identical on every playthrough.
+## Hand-authored terrain heightmap, enemy placement, and background
+## installation (building) data for this stage. Generated once with a
+## deterministic parametric curve and saved as plain data so the route
+## and hazards are identical on every playthrough.
 
 static func get_data() -> Dictionary:
 	return {
@@ -145,5 +146,16 @@ static func get_data() -> Dictionary:
 			{"type": "turret", "x": 3200.0},
 			{"type": "missile", "x": 3350.0},
 			{"type": "flyer", "x": 3400.0, "y": 123.2, "amp": 13.0, "freq": 1.5},
+	],
+		"buildings": [
+			{"x": 140.0, "w": 14.0, "h": 14.4, "rows": 2},
+			{"x": 520.0, "w": 18.0, "h": 27.2, "rows": 3},
+			{"x": 710.0, "w": 12.0, "h": 18.4, "rows": 2},
+			{"x": 1280.0, "w": 20.0, "h": 23.5, "rows": 4},
+			{"x": 1470.0, "w": 16.0, "h": 15.7, "rows": 3},
+			{"x": 1850.0, "w": 14.0, "h": 25.3, "rows": 2},
+			{"x": 2040.0, "w": 18.0, "h": 34.5, "rows": 3},
+			{"x": 2420.0, "w": 12.0, "h": 12.0, "rows": 2},
+			{"x": 2990.0, "w": 20.0, "h": 41.3, "rows": 4},
 	],
 	}
