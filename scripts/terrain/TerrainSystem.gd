@@ -13,7 +13,7 @@ var keyframes: Array = []
 var stage_length: float = 0.0
 var _segments: Array = []
 
-func build(stage_terrain: Array) -> void:
+func build(stage_terrain: Array, fill_color: Color = Palette.TERRAIN_ROCK, outline_color: Color = Palette.TERRAIN_ROCK_LIGHT) -> void:
 	clear()
 	keyframes = stage_terrain
 	if keyframes.is_empty():
@@ -23,7 +23,7 @@ func build(stage_terrain: Array) -> void:
 		var a: Dictionary = keyframes[i]
 		var b: Dictionary = keyframes[i + 1]
 		var seg := TerrainSegment.new()
-		seg.setup(b.x - a.x, a.ceiling, b.ceiling, a.floor, b.floor)
+		seg.setup(b.x - a.x, a.ceiling, b.ceiling, a.floor, b.floor, fill_color, outline_color)
 		add_child(seg)
 		_segments.append({"node": seg, "world_x": a.x})
 

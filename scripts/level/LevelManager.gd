@@ -39,7 +39,11 @@ func _ready() -> void:
 
 func load_stage(stage_data: Dictionary) -> void:
 	_stage_data = stage_data
-	terrain.build(stage_data.get("terrain", []))
+	terrain.build(
+		stage_data.get("terrain", []),
+		stage_data.get("terrain_color", Palette.TERRAIN_ROCK),
+		stage_data.get("terrain_outline", Palette.TERRAIN_ROCK_LIGHT)
+	)
 	_stage_length = terrain.stage_length
 	_enemy_spawns = (stage_data.get("enemies", []) as Array).duplicate(true)
 	_enemy_spawns.sort_custom(func(a, b): return a.x < b.x)
